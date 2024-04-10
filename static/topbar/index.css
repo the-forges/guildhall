@@ -1,0 +1,37 @@
+#topbar {
+    display: flex;
+    background-color: #262626;
+    color: #FFFFFF;
+    box-shadow: 0 3px 8px 0 rgba(0 ,0 , 0, 0.15);
+}
+
+h1 {
+    font-size: 1em;
+    margin: 1em;
+}
+
+#deadspace {
+    flex: 3;
+}
+
+ul {
+    display: inline-block;
+    margin: 1em;
+}
+
+ul li {
+    display: inline-block;
+    border-right: 1px solid white;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+ul li:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+ul li a {
+    text-decoration: none;
+    color: white;
+}
