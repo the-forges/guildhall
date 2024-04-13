@@ -3,14 +3,16 @@
     <head>
         <title>Guild Hall</title>
         <link rel="stylesheet" href="index.css" />
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
         <script src="auth/index.js"></script>
         <script src="topbar/index.js"></script>
         <script src="counter/index.js"></script>
     </head>
     <body>
-        <app-auth></app-auth>
-        <app-topbar></app-topbar>
-        <counter-app></counter-app>
-        <counter-app current-count="10"></counter-app>
+        <app-auth>
+            <app-topbar></app-topbar>
+            <counter-app></counter-app>
+            <counter-app current-count="10"></counter-app>
+        </app-auth>
     </body>
 </html>

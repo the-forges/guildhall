@@ -3,13 +3,3 @@ body {
     padding: 0;
     background-color: #FFFFFF;
 }
-
-counter-app {
-    transition: padding 400ms ease-out;
-    padding: 0;
-}
-
-counter-app:hover {
-    transition: padding 400ms ease-in;
-    padding: 2em;
-}
