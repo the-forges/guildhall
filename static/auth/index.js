@@ -1,4 +1,4 @@
-const template = `
+var template = `
 <style>
 .hidden {
     display: none;
@@ -75,7 +75,7 @@ class Auth extends HTMLElement {
                 clearInterval(pollId)
                 pollId = null;
             }
-        }, 500)
+        }, 10000)
     }
     saveAuthentication(user) {
         localStorage.setItem("user", JSON.stringify(user));
