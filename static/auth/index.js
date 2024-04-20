@@ -7,18 +7,18 @@ class Auth extends HTMLElement {
 .hidden {
     display: none;
 }
-.visible {
-    display: inherit;
-}
-#authentication {
+#unauthenticated {
     margin: 0;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 </style>
-<div id="unauthenticated" class="visible">
+<div id="unauthenticated" class="hidden">
+    <h1>Guildhall Login</h1>
+    <p>Please scan your passport</p>
     <div id="authentication"></div>
 </div>
 <div id="authenticated" class="hidden"><slot></slot></div>
@@ -40,16 +40,17 @@ class Auth extends HTMLElement {
         t.innerHTML = this.template;
         this.shadowRoot.appendChild(t.content.cloneNode(true));
 
+        let authenticated = this.shadowRoot.getElementById("authenticated");
+        let unauthenticated = this.shadowRoot.getElementById("unauthenticated");
+        unauthenticated.classList.remove("hidden");
+
         this.loadAuthentication();
 
         if (!this.authenticated) {
             this.setupAuthentication();
         } else {
-            let authenticated = this.shadowRoot.getElementById("authenticated");
-            authenticated.classList.replace("hidden", "visible");
-
-            let unauthenticated = this.shadowRoot.getElementById("unauthenticated");
-            unauthenticated.classList.replace("visible", "hidden");
+            authenticated.classList.remove("hidden");
+            unauthenticated.classList.add("hidden");
         }
     }
     logout(_) {

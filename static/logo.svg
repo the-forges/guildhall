@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="200mm"
+   height="200mm"
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.1 (9b9bdc1480, 2023-11-25, custom)"
+   sodipodi:docname="guildhall001.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.0431888"
+     inkscape:cx="396.86008"
+     inkscape:cy="561.73914"
+     inkscape:window-width="3440"
+     inkscape:window-height="1440"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g4"
+     showguides="true" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3">
+      <g
+         id="g4"
+         transform="matrix(1.9920704,0,0,1.5608081,-75.704075,-123.3028)">
+        <text
+           xml:space="preserve"
+           style="font-size:152.465px;fill:#000000;stroke-width:12.7054"
+           x="41.197594"
+           y="179.15152"
+           id="text2"
+           transform="scale(0.90220055,1.108401)"><tspan
+             sodipodi:role="line"
+             id="tspan2"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Cascadia Mono PL';-inkscape-font-specification:'Cascadia Mono PL';stroke-width:12.7054"
+             x="41.197594"
+             y="179.15152">G</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:152.465px;fill:#000000;stroke-width:12.7054"
+           x="70.135483"
+           y="186.06279"
+           id="text3"
+           transform="scale(0.90220055,1.108401)"><tspan
+             sodipodi:role="line"
+             id="tspan3"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Cascadia Mono PL';-inkscape-font-specification:'Cascadia Mono PL';stroke-width:12.7054"
+             x="70.135483"
+             y="186.06279">H</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
