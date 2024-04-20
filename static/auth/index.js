@@ -1,4 +1,8 @@
-var template = `
+class Auth extends HTMLElement {
+    user = {};
+    authenticated = false;
+
+    template = `
 <style>
 .hidden {
     display: none;
@@ -19,13 +23,10 @@ var template = `
 </div>
 <div id="authenticated" class="hidden"><slot></slot></div>
 `;
-
-class Auth extends HTMLElement {
-    user = {};
-    authenticated = false;
     constructor() {
         super();
         this.attachShadow({mode: "open"});
+        window.addEventListener("logout", evt => this.logout());
         this.clear();
         this.render();
     }
@@ -36,7 +37,7 @@ class Auth extends HTMLElement {
     }
     render() {
         let t = document.createElement("template");
-        t.innerHTML = template;
+        t.innerHTML = this.template;
         this.shadowRoot.appendChild(t.content.cloneNode(true));
 
         this.loadAuthentication();
@@ -51,9 +52,15 @@ class Auth extends HTMLElement {
             unauthenticated.classList.replace("visible", "hidden");
         }
     }
+    logout(_) {
+        this.authenticated = false;
+        this.user = {};
+        localStorage.clear();
+        this.clear();
+        this.render();
+    }
     loadAuthentication() {
         const user = localStorage.getItem("user");
-        console.log(user)
         if (user && user !== "") {
             this.user = JSON.parse(user);
             this.authenticated = true;
@@ -63,9 +70,8 @@ class Auth extends HTMLElement {
         const response = await fetch('/api/preauth');
         const env = await response.json();
         const url = window.location.href+"api";
-        console.log(url);
-
         let authentication = this.shadowRoot.getElementById("authentication");
+
         new QRCode(authentication, url+"/authenticate/"+env.code);
 
         let pollId = setInterval(async () => {
@@ -75,7 +81,7 @@ class Auth extends HTMLElement {
                 clearInterval(pollId)
                 pollId = null;
             }
-        }, 10000)
+        }, 100)
     }
     saveAuthentication(user) {
         localStorage.setItem("user", JSON.stringify(user));
