@@ -11,3 +11,4 @@ diesel = { version = "2.1.5", features = ["postgres", "chrono"] }
 rocket = { version = "0.5.0", features = ["json"] }
 uuid = { version = "1.8.0", features = ["std", "v8", "rng", "v4"] }
 serde = { version = "1.0.197", features = ["derive"] }
+rocket_cors = "0.6.0"
