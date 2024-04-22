@@ -1,4 +1,8 @@
+[tasks.init_web]
+script = "mkdir -p static && git submodule update --init --recursive"
+
 [tasks.build_web]
+dependencies = ["init_web"]
 cwd = "./guildhall_web"
 script = "flutter build web"
 
