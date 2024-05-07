@@ -1,3 +1,4 @@
+use std::cmp::PartialEq;
 use std::env;
 use rocket::{get, post};
 use rocket::serde::{Deserialize, json::Json};
@@ -6,7 +7,7 @@ use serde::Serialize;
 
 use crate::database;
 use crate::models::user::User;
-use crate::schema::users::dsl::{id as id_col, users as users_dsl};
+use crate::schema::users::dsl::{id as id_col, display_name as display_name_col, users as users_dsl};
 use crate::schema::users;
 use crate::models::challenge::Challenge;
 use crate::schema::challenges::dsl::{id as challenge_id_col, user_id, challenges as challenges_dsl};
@@ -39,6 +40,7 @@ pub fn preauth() -> Json<PreAuthResponse> {
 #[serde(crate = "rocket::serde")]
 struct AuthenticationRequest {
     public_key: String,
+    user: User
 }
 
 #[derive(Serialize)]
@@ -59,14 +61,13 @@ pub fn authenticate(code: String, request: Json<AuthenticationRequest>) -> Json<
         }
     };
 
-    println!("public_key: {}, code: {}", request.public_key.clone(), code);
     let res = users_dsl.filter(id_col.eq(request.public_key.clone())).first(connection);
     let user = match res {
         Ok(user) => user,
         Err(err) => {
             println!("error finding user: {}", err);
             let id = code.clone();
-            let display_name = None;
+            let display_name = request.user.clone().display_name;
             let user = User{id, display_name};
             match diesel::insert_into(users::table)
                 .values::<User>(user.clone().into())
@@ -80,11 +81,22 @@ pub fn authenticate(code: String, request: Json<AuthenticationRequest>) -> Json<
         }
     };
 
-    match diesel::update(challenges_dsl.filter(challenge_id_col.eq(challenge.id)))
+    let res = match diesel::update(challenges_dsl.filter(challenge_id_col.eq(challenge.id)))
         .set(user_id.eq(user.clone().id))
         .execute(connection) {
-        Ok(_) => Json(AuthenticationResponse{error: None, user: Some(user)}),
-        Err(_) => Json(AuthenticationResponse{error: Some("Error updating challenge".to_string()), user: None})
+        Ok(_) => AuthenticationResponse{error: None, user: Some(user.clone())},
+        Err(_) => AuthenticationResponse{error: Some("Error updating challenge".to_string()), user: None}
+    };
+
+    if res.error != None {
+        return Json(res);
+    }
+
+    match diesel::update(users_dsl.filter((id_col.eq(user.clone().id))))
+        .set(display_name_col.eq(user.clone().display_name))
+        .execute(connection) {
+        Ok(_) => Json(AuthenticationResponse{error: None, user: Some(user.clone())}),
+        Err(_) => Json(AuthenticationResponse{error: Some("Error updating user".to_string()), user: None})
     }
 }
 
