@@ -1,0 +1,2 @@
+DROP challenges;
+DROP users;

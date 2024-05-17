@@ -1,11 +1,11 @@
-FROM rust:latest
+FROM golang:latest
 LABEL authors="m3talsmith"
 
 EXPOSE 8000
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y libmariadb-dev-compat libmariadb-dev
+RUN apt-get update && apt-get upgrade -y
 WORKDIR /prod
 COPY . .
-RUN cargo build --release
+RUN APP_NAME=guildhall make build
 
-CMD ["./target/release/guildhall"]
+CMD ["./build/guildhall"]
