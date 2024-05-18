@@ -34,8 +34,7 @@ class Authenticated extends HTMLElement {
         }
         </style>
         <div id="unauthenticated" class="hidden">
-            <h1>Guildhall Login</h1>
-            <p>Please scan your passport</p>
+            <p>Please scan your passport, to sign in</p>
             <canvas id="authentication"></canvas>
             <p>Session ID: <span id="sessionId"></span></p>
         </div>
@@ -54,7 +53,6 @@ class Authenticated extends HTMLElement {
                 let el = this.shadowRoot.querySelector("#sessionId");
                 el.innerHTML=this.sessionId;
             });
-
         } else {
             authenticated.classList.remove("hidden");
             unauthenticated.classList.add("hidden");
@@ -74,7 +72,7 @@ class Authenticated extends HTMLElement {
             this.user = JSON.parse(user);
         }
         const sessionId = localStorage.getItem("sessionId");
-        if (sessionId && sessionId !== "") {
+        if (sessionId && sessionId !== "" && sessionId !== undefined) {
             this.sessionId = sessionId;
             this.authenticated = true;
         }
@@ -97,7 +95,7 @@ class Authenticated extends HTMLElement {
             const res = await fetch(`${url}authenticated/${data.challenge}`);
             let body = await res.json();
             if (body.user) {
-                this.sessionId = body.challenge;
+                this.sessionId = data.challenge;
                 this.user = body.user;
                 this.saveAuthentication();
                 clearInterval(timer);
