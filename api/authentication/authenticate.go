@@ -42,8 +42,14 @@ func (a Authenticate) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.PublicKey == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(AuthenticateResponse{Error: "Bad json body sent: missing public_key"})
+		return
+	}
+
 	if c.UserID != "" && c.UserID != req.PublicKey {
-		fmt.Fprintf(os.Stderr, "[REDFLAG] Authenticate tried reusing a already used challenge with a new public key: {code: %s, public_key: %s}", code, req.PublicKey)
+		fmt.Fprintf(os.Stderr, "[REDFLAG] Authenticate tried reusing a already used challenge with a new public key: {code: %s, public_key: %s}\n", code, req.PublicKey)
 
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(AuthenticateResponse{Error: "Missing or bad challenge code sent"})
