@@ -16,13 +16,18 @@ migrations-up:
 migrations-down:
 	@migrate -database "${DATABASE_URL}" -source file://${CWD}/db/migrations down
 
-build: clean
+build: clean build-web build-server
+
+build-server:
 	@mkdir -p ${CWD}/build
 	@go mod tidy
 	@go build -o ${CWD}/build/${APP_NAME} .
 
+build-web:
+	@vite build web
+
 run: PORT?=8000
-run: build
+run: clean build-server
 	@${CWD}/build/${APP_NAME} -port ${PORT}
 
 clean:

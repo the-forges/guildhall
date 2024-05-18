@@ -92,10 +92,8 @@ class Authenticated extends HTMLElement {
         const url = window.location.href+"api/";
         let authentication = this.shadowRoot.querySelector("#authentication");
         QRCode.toCanvas(authentication, `${url}authenticate/${data.challenge}`)
-        console.log(`${url}authenticate/${data.challenge}`);
 
         let timer = setInterval(async () => {
-            console.log(`${url}authenticated/${data.challenge}`);
             const res = await fetch(`${url}authenticated/${data.challenge}`);
             let body = await res.json();
             if (body.user) {
@@ -105,7 +103,7 @@ class Authenticated extends HTMLElement {
                 clearInterval(timer);
                 timer = null;
             }
-        }, 10000);
+        }, 10);
     }
     static get observedAttributes() {
         return ['authenticated'];
