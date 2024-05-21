@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"guildhall/api/authentication"
+	"guildhall/api/forges"
+	"guildhall/api/sessions"
 	"guildhall/db"
 	"log"
 	"net/http"
@@ -26,6 +28,9 @@ func main() {
 	http.Handle("GET /api/preauth", authentication.NewPreAuth())
 	http.Handle("GET /api/authenticated/{challenge}", authentication.NewAuthenticated())
 	http.Handle("POST /api/authenticate/{challenge}", authentication.NewAuthenticate())
+	http.Handle("GET /api/forges", sessions.NewAuthenticatedMiddleware(forges.NewFindAllHandler()))
+	http.Handle("GET /api/forges/{id}", sessions.NewAuthenticatedMiddleware(forges.NewFindHandler()))
+	http.Handle("POST /api/forges", sessions.NewAuthenticatedMiddleware(forges.NewCreateHandler()))
 	http.Handle("/", http.FileServer(http.Dir("web/dist")))
 
 	log.Printf("Server listening on port %d", port)

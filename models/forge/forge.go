@@ -19,7 +19,7 @@ func New() (*Forge, error) {
 
 func FindAll() ([]Forge, error) {
 	var forges []Forge
-	rows, err := db.Instance().Query("SELECT * FROM forges")
+	rows, err := db.Instance().Query("SELECT id, name FROM forges")
 	if err != nil {
 		return forges, err
 	}
@@ -27,7 +27,7 @@ func FindAll() ([]Forge, error) {
 
 	var forge Forge
 	for rows.Next() {
-		if err := rows.Scan(&forge); err != nil {
+		if err := rows.Scan(&forge.ID, &forge.Name); err != nil {
 			return forges, err
 		}
 		forges = append(forges, forge)
