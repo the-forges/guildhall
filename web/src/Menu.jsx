@@ -7,11 +7,17 @@ function Menu({ leading, title, trailing }) {
     }
 
     return (
-        <div className="menu">
-            <div className="leading">{leading}</div>
-            <h1 className="title">{title}</h1>
-            <div className="expanse"></div>
-            <div className="trailing">{trailing}</div>
+        <div className='menu'>
+
+            <div className="menu-top">
+                <div className="leading">{leading}</div>
+                <h1 className="title">{title}</h1>
+                <div className="expanse"></div>
+                <div className="trailing">{trailing}</div>
+            </div>
+            <div className='menu-bottom'>
+                <a href="#/forges">Forges</a>
+            </div>
         </div>
     )
 }

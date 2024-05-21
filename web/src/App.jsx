@@ -15,8 +15,8 @@ function App() {
         title='Guildhall'
         trailing={
           <button id='logout' onClick={logout}>Logout</button>
-        }
-      />
+        }>
+      </Menu>
     </Authenticated>
   );
 }
