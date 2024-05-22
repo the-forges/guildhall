@@ -17,9 +17,13 @@ func New() (*Forge, error) {
 	return &Forge{ID: id.String()}, err
 }
 
-func FindAll() ([]Forge, error) {
+func FindAll(userId string) ([]Forge, error) {
 	var forges []Forge
-	rows, err := db.Instance().Query("SELECT id, name FROM forges")
+	rows, err := db.Instance().Query(`
+		SELECT forges.id, forges.name FROM forges
+		JOIN forge_members ON forges.id=forge_members.forge_id
+		WHERE forge_members.user_id=$1
+	`, userId)
 	if err != nil {
 		return forges, err
 	}

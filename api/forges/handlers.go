@@ -3,7 +3,9 @@ package forges
 import (
 	"encoding/json"
 	"fmt"
+	"guildhall/api/sessions"
 	"guildhall/models/forge"
+	"guildhall/models/forgemember"
 	"net/http"
 )
 
@@ -19,7 +21,13 @@ func NewFindAllHandler() *FindAllHandler {
 }
 
 func (h FindAllHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	forges, err := forge.FindAll()
+	session, err := sessions.SessionFromContext(r.Context())
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(FindAllResponse{Error: err.Error()})
+		return
+	}
+	forges, err := forge.FindAll(session.User.ID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = json.NewEncoder(w).Encode(FindAllResponse{Error: err.Error()})
@@ -66,13 +74,6 @@ func NewCreateHandler() *CreateHandler {
 }
 
 func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	forge, err := forge.New()
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
-		return
-	}
-
 	var req CreateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -80,12 +81,44 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	forge.Name = req.Name
-
-	if err := forge.Create(); err != nil {
+	session, err := sessions.SessionFromContext(r.Context())
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
 		return
 	}
-	_ = json.NewEncoder(w).Encode(CreateResponse{Forge: forge})
+
+	f, err := forge.New()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
+		return
+	}
+
+	f.Name = req.Name
+
+	if err := f.Create(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
+		return
+	}
+
+	fm, err := forgemember.New()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
+		return
+	}
+
+	fm.ForgeID = f.ID
+	fm.UserID = session.User.ID
+	fm.Role = forgemember.RoleOwner
+
+	if err := fm.Create(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
+		return
+	}
+
+	_ = json.NewEncoder(w).Encode(CreateResponse{Forge: f})
 }

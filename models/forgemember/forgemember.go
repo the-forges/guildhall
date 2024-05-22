@@ -11,6 +11,7 @@ type ForgeMember struct {
 	ID      string `json:"id"`
 	ForgeID string `json:"forge_id"`
 	UserID  string `json:"user_id"`
+	Role    string `json:"role"`
 }
 
 func New() (*ForgeMember, error) {
@@ -21,7 +22,7 @@ func New() (*ForgeMember, error) {
 func FindAllByForgeID(id string) ([]ForgeMember, error) {
 	var forgeMembers []ForgeMember
 	rows, err := db.Instance().Query(`
-		SELECT id, forge_id, user_id FROM forge_members
+		SELECT id, forge_id, user_id, role FROM forge_members
 		WHERE forge_id=$1
 	`, id)
 	if err != nil {
@@ -31,7 +32,7 @@ func FindAllByForgeID(id string) ([]ForgeMember, error) {
 
 	var forgeMember ForgeMember
 	for rows.Next() {
-		if err := rows.Scan(&forgeMember.ID, &forgeMember.ForgeID, &forgeMember.UserID); err != nil {
+		if err := rows.Scan(&forgeMember.ID, &forgeMember.ForgeID, &forgeMember.UserID, &forgeMember.Role); err != nil {
 			return forgeMembers, err
 		}
 		forgeMembers = append(forgeMembers, forgeMember)
@@ -45,7 +46,7 @@ func FindAllByForgeID(id string) ([]ForgeMember, error) {
 func FindAllByUserID(id string) ([]ForgeMember, error) {
 	var forgeMembers []ForgeMember
 	rows, err := db.Instance().Query(`
-		SELECT id, forge_id, user_id FROM forge_members
+		SELECT id, forge_id, user_id, role FROM forge_members
 		WHERE user_id=$1
 	`, id)
 	if err != nil {
@@ -55,7 +56,7 @@ func FindAllByUserID(id string) ([]ForgeMember, error) {
 
 	var forgeMember ForgeMember
 	for rows.Next() {
-		if err := rows.Scan(&forgeMember.ID, &forgeMember.ForgeID, &forgeMember.UserID); err != nil {
+		if err := rows.Scan(&forgeMember.ID, &forgeMember.ForgeID, &forgeMember.UserID, &forgeMember.Role); err != nil {
 			return forgeMembers, err
 		}
 		forgeMembers = append(forgeMembers, forgeMember)
@@ -68,9 +69,9 @@ func FindAllByUserID(id string) ([]ForgeMember, error) {
 
 func (f *ForgeMember) Create() error {
 	res, err := db.Instance().Exec(`
-		INSERT INTO forge_members (id, forge_id, user_id)
-		VALUES ($1, $2, $3)
-	`, f.ID, f.ForgeID, f.UserID)
+		INSERT INTO forge_members (id, forge_id, user_id, role)
+		VALUES ($1, $2, $3, $4)
+	`, f.ID, f.ForgeID, f.UserID, f.Role)
 	if err != nil {
 		return err
 	}
