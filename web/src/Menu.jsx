@@ -16,7 +16,7 @@ function Menu({ leading, title, trailing }) {
                 <div className="trailing">{trailing}</div>
             </div>
             <div className='menu-bottom'>
-                <a href="#/forges">Forges</a>
+                <a href="/">Home</a>
             </div>
         </div>
     )

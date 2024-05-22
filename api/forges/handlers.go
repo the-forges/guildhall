@@ -50,6 +50,10 @@ func (h FindHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(FindResponse{Forge: forge})
 }
 
+type CreateRequest struct {
+	Name string `json:"name"`
+}
+
 type CreateResponse struct {
 	Error string       `json:"error,omitempty"`
 	Forge *forge.Forge `json:"forge,omitempty"`
@@ -68,6 +72,16 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
 		return
 	}
+
+	var req CreateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
+		return
+	}
+
+	forge.Name = req.Name
+
 	if err := forge.Create(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = json.NewEncoder(w).Encode(CreateResponse{Error: err.Error()})
